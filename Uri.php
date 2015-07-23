@@ -14,7 +14,7 @@ namespace Panada\Request;
  *
  * @author kandar <iskandarsoesman@gmail.com>
  */
-class Uri
+class Uri extends \Panada\Utilities\Factory
 {
     protected $config = [
         'defaultController' => 'Home',
@@ -33,6 +33,17 @@ class Uri
     public function __construct($config = [])
     {
         $this->setConfig($config);
+    }
+    
+    public static function getInstance()
+    {
+        $child = __CLASS__;
+        
+        if (! isset(parent::$instance[$child])) {
+            parent::$instance[$child] = (new static)->fromServer();
+        }
+        
+        return self::$instance[$child];
     }
     
     /**
@@ -72,6 +83,7 @@ class Uri
         $this->pathInfo         = trim(strtok(str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']), '?'), '/');
         $this->location         = rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
         $this->pathSegment      = explode('/', $this->pathInfo);
+        $this->relLocation      = str_replace($this->pathInfo, '', rtrim($_SERVER['REQUEST_URI'], '/'));
         
         return $this;
     }
@@ -139,6 +151,11 @@ class Uri
         return $this->location;
     }
     
+    public function location($path = null)
+    {
+        return $this->relLocation.$path;
+    }
+    
     /*
      * @return array
      */
@@ -203,7 +220,7 @@ class Uri
             return array_slice($this->pathSegment, $segment);
         }
 
-        return false;
+        return [];
 
     }
     
