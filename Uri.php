@@ -14,7 +14,7 @@ namespace Panada\Request;
  *
  * @author kandar <iskandarsoesman@gmail.com>
  */
-class Uri extends \Panada\Utilities\Factory
+class Uri extends \Panada\Utility\Factory
 {
     protected $config = [
         'defaultController' => 'Home',
@@ -79,8 +79,10 @@ class Uri extends \Panada\Utilities\Factory
     {
         $scriptPath             = explode('/', $_SERVER['SCRIPT_NAME']);
         $this->frontController  = end($scriptPath);
-        $this->basePath         = $this->config['assetPath'] = str_replace($this->frontController, '', $_SERVER['SCRIPT_NAME']); 
-        $this->pathInfo         = trim(strtok(str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['REQUEST_URI']), '?'), '/');
+        $this->basePath         = $this->config['assetPath'] = str_replace($this->frontController, '', $_SERVER['SCRIPT_NAME']);
+        $scriptName             = str_replace($this->frontController, '', $_SERVER['SCRIPT_NAME']);
+        $requestURI             = str_replace($this->frontController, '', $_SERVER['REQUEST_URI']);
+        $this->pathInfo         = trim(strtok(str_replace($scriptName, '', $requestURI), '?'), '/');
         $this->location         = rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
         $this->pathSegment      = explode('/', $this->pathInfo);
         $this->relLocation      = str_replace($this->pathInfo, '', rtrim($_SERVER['REQUEST_URI'], '/'));
@@ -93,8 +95,8 @@ class Uri extends \Panada\Utilities\Factory
      */
     public function debug()
     {
-        echo $_SERVER['SCRIPT_NAME'].'<br>';
-        echo $_SERVER['REQUEST_URI'].'<br><br>';
+        echo 'SCRIPT_NAME: '.$_SERVER['SCRIPT_NAME'].'<br>';
+        echo 'REQUEST_URI: '.$_SERVER['REQUEST_URI'].'<br><br>';
         echo 'frontController: '.$this->frontController.'<br>';
         echo 'basePath: '.$this->basePath.'<br>';
         echo 'pathInfo: '.$this->pathInfo.'<br>';
