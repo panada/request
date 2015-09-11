@@ -29,6 +29,9 @@ class Uri extends \Panada\Utility\Factory
     protected $pathInfo;
     protected $location;
     protected $pathSegment = [];
+    protected $requestMethod = 'GET';
+    protected $host;
+    protected $queryString;
     
     public function __construct($config = [])
     {
@@ -86,6 +89,9 @@ class Uri extends \Panada\Utility\Factory
         $this->location         = rtrim(strtok($_SERVER['REQUEST_URI'], '?'), '/');
         $this->pathSegment      = explode('/', $this->pathInfo);
         $this->relLocation      = str_replace($this->pathInfo, '', rtrim($_SERVER['REQUEST_URI'], '/'));
+        $this->requestMethod    = $_SERVER['REQUEST_METHOD'];
+        $this->host             = $_SERVER['HTTP_HOST'];
+        $this->queryString      = $_SERVER['QUERY_STRING'];
         
         return $this;
     }
@@ -103,6 +109,31 @@ class Uri extends \Panada\Utility\Factory
         echo 'location: '.$this->location.'<br>';
         print_r($this->pathSegment);
         exit;
+    }
+    
+    public function setQueryString($queryString)
+    {
+        $this->queryString = $queryString;
+    }
+    
+    public function setHost($host)
+    {
+        $this->host = $host;
+    }
+    
+    public function getHost()
+    {
+        return $this->host;
+    }
+    
+    public function setRequestMethod($requestMethod)
+    {
+        $this->requestMethod = $requestMethod;
+    }
+    
+    public function getRequestMethod()
+    {
+        return $this->requestMethod;
     }
     
     public function setFrontController($frontController)
