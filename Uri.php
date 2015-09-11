@@ -91,7 +91,9 @@ class Uri extends \Panada\Utility\Factory
         $this->relLocation      = str_replace($this->pathInfo, '', rtrim($_SERVER['REQUEST_URI'], '/'));
         $this->requestMethod    = $_SERVER['REQUEST_METHOD'];
         $this->host             = $_SERVER['HTTP_HOST'];
-        $this->queryString      = $_SERVER['QUERY_STRING'];
+        
+        if(isset($_SERVER['QUERY_STRING']))
+            $this->queryString  = $_SERVER['QUERY_STRING'];
         
         return $this;
     }
