@@ -49,6 +49,13 @@ class Uri extends \Panada\Utility\Factory
         return self::$instance[$child];
     }
     
+    public static function setInstance($config = [])
+    {
+        $child = __CLASS__;
+        
+        return parent::$instance[$child] = new Uri($config);
+    }
+    
     /**
      * The default value is equal to $this->basePath
      *
@@ -165,6 +172,7 @@ class Uri extends \Panada\Utility\Factory
     public function setPathInfo($pathInfo)
     {
         $this->pathInfo = $pathInfo;
+        $this->pathSegment = explode('/', $this->pathInfo);
         
         return $this;
     }
