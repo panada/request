@@ -18,6 +18,7 @@ class Uri extends \Panada\Utility\Factory
 {
     protected $config = [
         'defaultController' => 'Home',
+        'defaultAction' => 'index',
         'assetPath' => null,
         
         // including protocol URI ex: http://cdn.mysite.com or //cdn.mysite.com
@@ -38,12 +39,12 @@ class Uri extends \Panada\Utility\Factory
         $this->setConfig($config);
     }
     
-    public static function getInstance()
+    public static function getInstance($config = [])
     {
         $child = __CLASS__;
         
         if (! isset(parent::$instance[$child])) {
-            parent::$instance[$child] = (new static)->fromServer();
+            parent::$instance[$child] = (new static($config))->fromServer();
         }
         
         return self::$instance[$child];
@@ -234,7 +235,7 @@ class Uri extends \Panada\Utility\Factory
      *
      * @return  string
      */
-    public function getAction($default = 'index')
+    public function getAction()
     {
         $uriString = $this->getSegment(1);
 
@@ -246,7 +247,7 @@ class Uri extends \Panada\Utility\Factory
             throw new \Exception('Invalid action name: ' . htmlentities($uriString));
         }
 
-        return $default;
+        return $this->config['defaultAction'];
     }
 
     /**
