@@ -33,6 +33,8 @@ class Uri extends \Panada\Utility\Factory
     protected $requestMethod = 'GET';
     protected $host;
     protected $queryString;
+    protected $port = 80;
+    protected $scheme = 'http';
     
     public function __construct($config = [])
     {
@@ -99,9 +101,11 @@ class Uri extends \Panada\Utility\Factory
         $this->relLocation      = str_replace($this->pathInfo, '', rtrim($_SERVER['REQUEST_URI'], '/'));
         $this->requestMethod    = $_SERVER['REQUEST_METHOD'];
         $this->host             = $_SERVER['HTTP_HOST'];
+        $this->port             = $_SERVER['SERVER_PORT'];
         
-        if(isset($_SERVER['QUERY_STRING']))
+        if(isset($_SERVER['QUERY_STRING'])) {
             $this->queryString  = $_SERVER['QUERY_STRING'];
+        }
         
         return $this;
     }
@@ -121,14 +125,30 @@ class Uri extends \Panada\Utility\Factory
         exit;
     }
     
+    public function setPort($port)
+    {
+        $this->port = $port;
+        
+        return $this;
+    }
+    
+    public function getPort()
+    {
+        return $this->port;
+    }
+    
     public function setQueryString($queryString)
     {
         $this->queryString = $queryString;
+        
+        return $this;
     }
     
     public function setHost($host)
     {
         $this->host = $host;
+        
+        return $this;
     }
     
     public function getHost()
@@ -139,6 +159,8 @@ class Uri extends \Panada\Utility\Factory
     public function setRequestMethod($requestMethod)
     {
         $this->requestMethod = $requestMethod;
+        
+        return $this;
     }
     
     public function getRequestMethod()
